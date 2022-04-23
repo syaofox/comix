@@ -11,46 +11,52 @@
 
 \033 [显示方式;字体色;背景色m ...... [\033 [0m]
 '''
+import time
+
+from mods.classes import Logtype
 
 
 class Logouter:
     comic_name = ''
+
     chapter_total = 0
     chapter_successed = 0
+    chapter_passed = 0
     chapter_failed = 0
 
     pic_total = 0
-    pic_successed = 0
+    pic_crawed = 0
     pic_passed = 0
     pic_failed = 0
+    pic_downloaded = 0
 
-    crawl_count = 0
+    @classmethod
+    def timestr(cls):
+        return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
     @classmethod
     def red(cls, msg):
-        print(f"\033[1;31;40m{msg}\033[0m")
+        print(f"[{cls.timestr()}]\033[1;31;1m{msg}\033[0m")
 
     @classmethod
     def blue(cls, msg):
-        print(f"\033[1;34;40m{msg}\034[0m")
+        print(f"[{cls.timestr()}]\033[1;34;1m{msg}\033[0m")
 
     @classmethod
     def green(cls, msg):
-        print(f"\033[1;32;40m{msg}\032[0m")
+        print(f"[{cls.timestr()}]\033[1;32;1m{msg}\033[0m")
 
     @classmethod
     def yellow(cls, msg):
-        print(f"\033[1;33;40m{msg}\033[0m")
+        print(f"[{cls.timestr()}]\033[1;33;1m{msg}\033[0m")
 
     @classmethod
     def crawlog(cls):
-        msg = (
-            f'【{cls.comic_name}】页面:\033[1;33;40m{cls.crawl_count}\033[0m | '
-            f'章节:\033[1;33;40m{cls.chapter_successed}\033[0m/\033[1;33;40m{cls.chapter_total}\033[0m '
-        )
+        msg = (f'[{cls.timestr()}]<\033[1;36;1m{cls.comic_name}\033[0m>章节:\033[1;33;1m{cls.chapter_successed}\033[0m/\033[1;33;1m{cls.chapter_total}\033[0m | '
+               f'图片:\033[1;33;1m{cls.pic_crawed}\033[0m/\033[1;33;1m{cls.pic_total}\033[0m ')
         print(msg)
 
     @classmethod
     def downloadlog(cls):
-        msg = f'【{cls.comic_name}】下载:\033[1;33;40m{cls.pic_successed + cls.pic_passed}\033[0m/\033[1;33;40m{cls.pic_total}\033[0m'
+        msg = f'[{cls.timestr()}]<\033[1;36;1m{cls.comic_name}\033[0m>下载:\033[1;33;1m{cls.pic_downloaded}\033[0m/\033[1;33;1m{cls.pic_total}\033[0m 失败:\033[1;31;1m{cls.pic_failed}\033[0m'
         print(msg)

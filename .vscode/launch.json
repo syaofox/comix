@@ -12,7 +12,9 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
-                "https://tw.manhuagui.com/comic/37618/"
+                // "C:\\Users\\syaofox\\Downloads\\manga_man\\[真造圭伍]东京宇宙人兄弟\\manhuagui.json"
+                "https://www.manhuagui.com/comic/43829/",
+                // "--mdir=C:\\Users\\syaofox\\Downloads\\trans\\xxx"
             ]
         }
     ]

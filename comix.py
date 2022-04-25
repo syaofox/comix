@@ -40,7 +40,7 @@ def start_craw(start_url, headless=False, szip=False, fzip=False, fselect=False)
         config = Config(start_url, parser.name, ccount=1, headless=headless, fselect=fselect)
         saver = ManhuaguiSaver(dcount=2, szip=szip, fzip=fzip)
 
-    elif ('klmanga' in start_url):
+    elif ('klmag' in start_url) or ('klmanga' in start_url):
 
         parser = KlmangaParser()
         config = Config(start_url, parser.name, ccount=5, headless=headless, fselect=fselect)

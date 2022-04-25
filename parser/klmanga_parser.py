@@ -34,6 +34,7 @@ class KlmangaParser(Parser):
         author = ''
         intro = doc('h3:contains("Description")').siblings('p').text()
         cover_url = doc('div.col-md-4 > div.well.info-cover > img.thumbnail').attr('src')
+        cover_url = urllib.parse.urljoin(page.url, cover_url)
 
         DataManager.comic['comic'] = name if DataManager.comic['comic'] == '' else DataManager.comic['comic']
         DataManager.comic['author'] = author if DataManager.comic['author'] == '' else DataManager.comic['author']

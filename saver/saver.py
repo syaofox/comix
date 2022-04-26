@@ -1,7 +1,6 @@
 import asyncio
 import os
 import aiohttp
-from mods.classes import Logtype
 from mods.datamgr import DataManager
 from mods.logouter import Logouter
 from mods.picchecker import PicChecker
@@ -114,7 +113,7 @@ class Saver:
                     async with session.get(url) as response:
                         status_code = response.status
                         if status_code != 200:
-                            raise Exception(f'下载失败！状态码={status_code}')
+                            raise Exception(f'下载失败！状态码={status_code},url={data}')
 
                         with open(fname, 'wb') as fd:
                             while True:

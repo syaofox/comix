@@ -1,5 +1,4 @@
 from enum import Enum
-from mods.settings import DOWNLOADS_DIR
 
 
 class Config:

@@ -1,14 +1,11 @@
-import asyncio
 import urllib
 
 from pyquery import PyQuery as pq
-from mods.classes import Logtype
 from mods.datamgr import DataManager
 from mods.logouter import Logouter
 from mods.utils import extrat_extname, md5
 from parser.parser import Parser
 from playwright.async_api import Page
-import lzstring
 
 
 class KlmangaParser(Parser):
@@ -52,7 +49,8 @@ class KlmangaParser(Parser):
             keystr = md5(url)
 
             title = cpt.text()
-            DataManager.comic['chapters'][keystr] = {'categories': '连载', 'title': title, 'url': url, 'status': 0}
+            if not DataManager.comic['chapters'].get(keystr, None):
+                DataManager.comic['chapters'][keystr] = {'categories': '连载', 'title': title, 'url': url, 'status': 0}
 
     async def parse_chapter_page(self, page: Page, param=None):
 

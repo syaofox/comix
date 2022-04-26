@@ -2,7 +2,6 @@ import asyncio
 import urllib
 
 from pyquery import PyQuery as pq
-from mods.classes import Logtype
 from mods.datamgr import DataManager
 from mods.logouter import Logouter
 from mods.utils import extrat_extname, md5

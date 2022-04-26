@@ -10,6 +10,9 @@ class Parser:
     def name(self):
         return 'base'
 
+    async def login(self, page: Page, param=None):
+        pass
+
     async def parse_main_page(self, page: Page, param=None):
         pass
 

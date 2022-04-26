@@ -4,8 +4,10 @@ import os
 from mods.settings import DOWNLOADS_DIR
 from mods.spider import Spider
 from mods.classes import Config
+from parser.comic18_parser import Comic18Parser
 from parser.klmanga_parser import KlmangaParser
 from parser.manhuagui_parser import ManhuaguiParser
+from saver.comic18_saver import Comic18Saver
 from saver.manhuagui_saver import ManhuaguiSaver
 from mods.datamgr import DataManager
 from saver.saver import Saver
@@ -45,6 +47,12 @@ def start_craw(start_url, headless=False, szip=False, fzip=False, fselect=False)
         parser = KlmangaParser()
         config = Config(start_url, parser.name, ccount=5, headless=headless, fselect=fselect)
         saver = Saver(dcount=8, szip=szip, fzip=fzip)
+
+    elif '18comic' in start_url:
+
+        parser = Comic18Parser()
+        config = Config(start_url, parser.name, ccount=5, headless=headless, fselect=fselect)
+        saver = Comic18Saver(dcount=5, szip=szip, fzip=fzip)
 
     if parser == None: return
     if saver == None: return

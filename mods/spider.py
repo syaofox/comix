@@ -6,10 +6,8 @@ from mods.classes import Config
 from mods.datamgr import DataManager
 
 from mods.logouter import Logouter
-from mods.settings import STORAGE_PATH
+from mods.settings import CHROMIUM_USER_DATA_DIR
 from mods.utils import valid_filename
-from saver.saver import Saver
-from mods.classes import Logtype
 
 
 class Spider:
@@ -17,7 +15,7 @@ class Spider:
     def __init__(self, config, parser, saver) -> None:
         self.config: Config = config
         self.parser = parser
-        self.saver: Saver = saver
+        self.saver = saver
         self.semaphore_crawl = asyncio.Semaphore(self.config.ccount)
 
     def run(self):
@@ -67,20 +65,23 @@ class Spider:
         # DataManager.init_comic()
 
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=self.config.headless)
+            browser = await p.chromium.launch_persistent_context(user_data_dir=CHROMIUM_USER_DATA_DIR, headless=self.config.headless, accept_downloads=True, args=['--disable-blink-features=AutomationControlled'])
+            # browser = await p.chromium.launch(headless=self.config.headless)
 
             # 读取cookies
-            storage_file = os.path.join(STORAGE_PATH, self.parser.name)
+            # storage_file = os.path.join(STORAGE_PATH, self.parser.name)
 
-            if os.path.exists(storage_file):
-                context = await browser.new_context(storage_state=storage_file)
-            else:
-                context = await browser.new_context()
+            # if os.path.exists(storage_file):
+            #     context = await browser.new_context(storage_state=storage_file)
+            # else:
+            #     context = await browser.new_context()
 
             # 首页爬取章节
             try:
 
-                await self.fetch_page(self.config.start_url, context, self.parser.parse_main_page)
+                await self.fetch_page(self.config.start_url, browser, self.parser.login)
+
+                await self.fetch_page(self.config.start_url, browser, self.parser.parse_main_page)
 
                 # 日志
                 Logouter.comic_name = DataManager.get_comicdir()
@@ -98,7 +99,7 @@ class Spider:
                 async_tasks = []
 
                 for _, chapter in DataManager.comic['chapters'].items():
-                    async_task = asyncio.create_task(self.parse_chapters(chapter, context))
+                    async_task = asyncio.create_task(self.parse_chapters(chapter, browser))
                     # async_task.add_done_callback(self.down_done)
                     async_tasks.append(async_task)
 
@@ -132,8 +133,8 @@ class Spider:
 
                 DataManager.savejson()
 
-                await context.storage_state(path=storage_file)
-                await context.close()
+                # await context.storage_state(path=storage_file)
+                # await context.close()
                 await browser.close()
 
     # 爬取主页

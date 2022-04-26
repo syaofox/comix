@@ -4,6 +4,7 @@ import os
 from mods.settings import DOWNLOADS_DIR
 from mods.spider import Spider
 from mods.classes import Config
+from parser.baozihm_parser import BaozimhParser
 from parser.comic18_parser import Comic18Parser
 from parser.klmanga_parser import KlmangaParser
 from parser.manhuagui_parser import ManhuaguiParser
@@ -53,6 +54,12 @@ def start_craw(start_url, headless=False, szip=False, fzip=False, fselect=False)
         parser = Comic18Parser()
         config = Config(start_url, parser.name, ccount=5, headless=headless, fselect=fselect, checklogin=True)
         saver = Comic18Saver(dcount=5, szip=szip, fzip=fzip)
+
+    elif 'baozimh' in start_url:
+
+        parser = BaozimhParser()
+        config = Config(start_url, parser.name, ccount=5, headless=headless, fselect=fselect, checklogin=True)
+        saver = Saver(dcount=5, szip=szip, fzip=fzip)
 
     if parser == None: return
     if saver == None: return

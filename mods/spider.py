@@ -49,7 +49,7 @@ class Spider:
             #{'categories': '單話', 'title': '第13話(19p)', 'url': 'https://tw.manhuagui.com/comic/36962/550128.html', 'status': 0}
             if chapter['status'] == 0:
 
-                await self.fetch_page(chapter['url'], context, self.parser.parse_chapter_page, param={'categories': categories_str, 'chapter': chapter_str})
+                await self.fetch_page(chapter['url'], context, self.parser.parse_chapter_page, param={'url': chapter['url'], 'categories': categories_str, 'chapter': chapter_str})
                 chapter['status'] = 1
 
                 Logouter.chapter_successed += 1
@@ -70,9 +70,9 @@ class Spider:
             # 首页爬取章节
             try:
                 if self.config.checklogin:
-                    await self.fetch_page(self.config.start_url, browser, self.parser.login)
+                    await self.fetch_page(self.config.start_url, browser, self.parser.login, param={'url': self.config.start_url})
 
-                await self.fetch_page(self.config.start_url, browser, self.parser.parse_main_page)
+                await self.fetch_page(self.config.start_url, browser, self.parser.parse_main_page, param={'url': self.config.start_url})
 
                 # 日志
                 Logouter.comic_name = DataManager.get_comicdir()

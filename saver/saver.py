@@ -137,12 +137,12 @@ class Saver:
             nretry = retry
             nretry += 1
             if nretry <= 5:
-                Logouter.yellow(f'错误:{e},重试={nretry}')
+                Logouter.yellow(f'错误:{e} {data},重试={nretry}')
                 await asyncio.sleep(5)
                 await self.down(data, nretry)
 
             else:
-                Logouter.red(f'错误:{e},重试超过最大次数，下载失败')
+                Logouter.red(f'错误:{e} {data},重试超过最大次数，下载失败')
                 return 2
 
     async def start_download_task(self):

@@ -51,7 +51,7 @@ def start_craw(start_url, headless=False, szip=False, fzip=False, fselect=False)
     elif '18comic' in start_url:
 
         parser = Comic18Parser()
-        config = Config(start_url, parser.name, ccount=5, headless=headless, fselect=fselect)
+        config = Config(start_url, parser.name, ccount=5, headless=headless, fselect=fselect, checklogin=True)
         saver = Comic18Saver(dcount=5, szip=szip, fzip=fzip)
 
     if parser == None: return

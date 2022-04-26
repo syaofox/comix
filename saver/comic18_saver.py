@@ -48,21 +48,10 @@ class Comic18Saver(Saver):
     def down_done(self, future):
         return super().down_done(future)
 
-    # async def handle_requestfinished(self, request):
-    #     print(">>", request.method, request.url)
-
-    # async def handle_response(self, response):
-    #     print("<<", response.status, response.url)
-    #     imgdata = await response.body()
-    #     with open(r"C:\Users\syaofox\Downloads\00016x.jpg", 'wb') as fd:
-    #         fd.write(imgdata)
-
     async def down(self, data, browser, retry=0):
         async with self.semaphore_down:
             page: Page = await browser.new_page()
             url = data['url']
-            # page.on("requestfinished", self.handle_requestfinished)
-            # page.on("response", self.handle_response)
 
             categories_str = valid_filename(f'{data["categories"]}')
             chapter_str = valid_filename(f'{data["chapter"]}')

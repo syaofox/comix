@@ -66,20 +66,11 @@ class Spider:
 
         async with async_playwright() as p:
             browser = await p.chromium.launch_persistent_context(user_data_dir=CHROMIUM_USER_DATA_DIR, headless=self.config.headless, accept_downloads=True, args=['--disable-blink-features=AutomationControlled'])
-            # browser = await p.chromium.launch(headless=self.config.headless)
-
-            # 读取cookies
-            # storage_file = os.path.join(STORAGE_PATH, self.parser.name)
-
-            # if os.path.exists(storage_file):
-            #     context = await browser.new_context(storage_state=storage_file)
-            # else:
-            #     context = await browser.new_context()
 
             # 首页爬取章节
             try:
-
-                await self.fetch_page(self.config.start_url, browser, self.parser.login)
+                if self.config.checklogin:
+                    await self.fetch_page(self.config.start_url, browser, self.parser.login)
 
                 await self.fetch_page(self.config.start_url, browser, self.parser.parse_main_page)
 
@@ -100,41 +91,12 @@ class Spider:
 
                 for _, chapter in DataManager.comic['chapters'].items():
                     async_task = asyncio.create_task(self.parse_chapters(chapter, browser))
-                    # async_task.add_done_callback(self.down_done)
                     async_tasks.append(async_task)
 
                 await asyncio.gather(*async_tasks)
 
-                # # 爬取每个章节图片
-                # for _, chapter in DataManager.comic['chapters'].items():
-                #     categories_str = valid_filename(f'{chapter["categories"]}')
-                #     chapter_str = valid_filename(f'{chapter["title"]}')
-
-                #     chapter_dir = os.path.join(DataManager.get_maindir(), categories_str, chapter_str)
-                #     test_zip_file = f'{chapter_dir}.zip'
-                #     if os.path.exists(test_zip_file):
-                #         chapter['status'] = 1
-
-                #     #{'categories': '單話', 'title': '第13話(19p)', 'url': 'https://tw.manhuagui.com/comic/36962/550128.html', 'status': 0}
-                #     if chapter['status'] == 0:
-
-                #         await self.fetch_page(chapter['url'], context, self.parser.parse_chapter_page, param={'categories': categories_str, 'chapter': chapter_str})
-                #         chapter['status'] = 1
-
-                #         Logouter.chapter_successed += 1
-                #         Logouter.crawlog()
-                #     else:
-                #         Logouter.chapter_successed += 1
-                #         Logouter.crawlog()
-
-                #     DataManager.savejson()
             finally:
-                # 保存cookies
-
                 DataManager.savejson()
-
-                # await context.storage_state(path=storage_file)
-                # await context.close()
                 await browser.close()
 
     # 爬取主页
@@ -152,12 +114,10 @@ class Spider:
             if nretry <= 5:
                 Logouter.yellow(f'页面{url}打开错误,重试={nretry}')
                 await asyncio.sleep(5)
-                await page.close()
                 await self.fetch_page(url, context=context, parse_method=parse_method, retry=nretry, param=param)
             else:
                 Logouter.red(e.message)
                 Logouter.red(f'页面{url}打开错误,重试超过最大次数')
-                await page.close()
 
         finally:
             await page.close()

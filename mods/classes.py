@@ -3,7 +3,7 @@ from enum import Enum
 
 class Config:
 
-    def __init__(self, start_url, parser_name, ccount=1, headless=False, fselect=False) -> None:
+    def __init__(self, start_url, parser_name, ccount=1, headless=False, fselect=False, checklogin=False) -> None:
         """_summary_
 
         Args:
@@ -21,6 +21,7 @@ class Config:
 
         self.headless = headless
         self.fselect = fselect
+        self.checklogin = checklogin
 
 
 class Logtype(Enum):

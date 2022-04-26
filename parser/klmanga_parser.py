@@ -19,6 +19,10 @@ class KlmangaParser(Parser):
 
     async def parse_main_page(self, page: Page, param=None):
 
+        await page.wait_for_selector('div.col-md-4 > div.well.info-cover > img.thumbnail')
+
+        # await page.locator('text=I understand and go on').click()
+
         html = await page.content()
         doc = pq(html)
 
@@ -31,6 +35,7 @@ class KlmangaParser(Parser):
         author = ''
         intro = doc('h3:contains("Description")').siblings('p').text()
         cover_url = doc('div.col-md-4 > div.well.info-cover > img.thumbnail').attr('src')
+
         cover_url = urllib.parse.urljoin(page.url, cover_url)
 
         DataManager.comic['comic'] = name if DataManager.comic['comic'] == '' else DataManager.comic['comic']

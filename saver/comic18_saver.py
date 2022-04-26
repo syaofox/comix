@@ -117,7 +117,7 @@ class Comic18Saver(Saver):
     async def start_download_task(self):
 
         async with async_playwright() as p:
-            browser = await p.chromium.launch_persistent_context(user_data_dir=CHROMIUM_USER_DATA_DIR, headless=False, accept_downloads=True, args=['--disable-blink-features=AutomationControlled'])
+            browser = await p.chromium.launch_persistent_context(user_data_dir=CHROMIUM_USER_DATA_DIR, headless=False, accept_downloads=True, args=['--disable-blink-features=AutomationControlled'], chromium_sandbox=False, ignore_https_errors=True)
 
             async_tasks = []
             pices = DataManager.comic.get('pices', None)
